@@ -37,6 +37,10 @@ with sync_playwright() as p:
         page.locator('#commercial-toggle').click()
         assert page.locator('#commercial-view').is_visible()
         assert page.locator('.street-shop').count()==2
+        assert page.locator('.street-backdrop').evaluate("""async img=>{
+            await img.decode();
+            return img.src.startsWith('data:image/')&&img.naturalWidth>0;
+        }""")
         shops=page.locator('.street-shop img').evaluate_all("""async images=>{
             await Promise.all(images.map(img=>img.decode()));
             const scene=document.querySelector('.commercial-street').getBoundingClientRect();
@@ -55,7 +59,7 @@ with sync_playwright() as p:
         assert .27<=g['ratio']<=.34 and g['data']>g['street'] and g['scroll']>g['data'],g
         page.screenshot(path=str(ARTIFACTS/'commercial-street-390.png'),full_page=True)
         return g
-    geometry=check('三七布局、两间门脸、数据区独立滚动',setup)
+    geometry=check('三七布局、内嵌街景和店铺、数据区独立滚动',setup)
     def focus_timer_and_actions():
         fixture=page.evaluate("""()=>{const s=FarmEngine.initial(Date.now());s.options.autoSell=false;s.xp=135;s.shops.food.open=true;s.inventory.carrot=8;s.inventory.bread=2;s.savedAt=Date.now();return s}""")
         tab=new_page(320,700,real_boot({KEY:json.dumps(fixture)}))
@@ -146,17 +150,31 @@ with sync_playwright() as p:
         assert sold['gold']==frozen['gold']+3 and sold['shops']['produce']['qty']==0
         return {'gold_after_sale':sold['gold'],'shelf_qty':sold['shops']['produce']['qty']}
     check('切页不改账、20游戏秒成交一件',sale_and_switch)
-    def reduced_motion_and_responsive():
-        page.evaluate("""()=>{const s=FarmTest.getState();s.options.reducedMotion=true;FarmTest.setState(s)}""")
-        assert page.locator('.street-customer').first.evaluate('(e)=>getComputedStyle(e).animationName')=='none'
+    def static_street_and_responsive():
+        assert page.locator('.street-customer').count()==0
         for w,h in [(1440,900),(320,700)]:
             page.set_viewport_size({'width':w,'height':h})
-            dims=page.evaluate('''()=>({scroll:document.documentElement.scrollWidth,w:innerWidth,stage:document.querySelector('.commercial-street').getBoundingClientRect().height})''')
-            assert dims['scroll']<=dims['w']+1 and dims['stage']>0,dims
+            dims=page.locator('.commercial-street').evaluate("""scene=>{
+                const street=scene.getBoundingClientRect();
+                const backdrop=scene.querySelector('.street-backdrop').getBoundingClientRect();
+                const floor=street.top+scene.clientHeight*(1-parseFloat(getComputedStyle(scene).getPropertyValue('--street-floor'))/100);
+                return {
+                    scroll:document.documentElement.scrollWidth,
+                    width:innerWidth,
+                    covered:backdrop.left<=street.left+.5&&backdrop.right>=street.right-.5,
+                    animations:scene.getAnimations({subtree:true}).length,
+                    grounded:[...scene.querySelectorAll('.street-shop')].every(shop=>{
+                        const art=shop.querySelector('img').getBoundingClientRect();
+                        const sign=shop.querySelector('.shop-signboard').getBoundingClientRect();
+                        return Math.abs(art.bottom-floor-2)<=1&&sign.top>=art.bottom&&sign.bottom<=street.bottom;
+                    })
+                };
+            }""")
+            assert dims['scroll']<=dims['width']+1 and dims['covered'] and dims['grounded'] and dims['animations']==0,dims
             if w==1440:page.screenshot(path=str(ARTIFACTS/'commercial-street-1440.png'),full_page=True)
         assert not errors,errors
-        return '减少动态停播顾客；320/1440 无横向溢出'
-    check('减少动态与窄窗/桌面布局',reduced_motion_and_responsive)
+        return '320/1440 无横向溢出；门脸贴地、静态街景铺满横向画布'
+    check('静态街景与窄窗/桌面的店铺落地',static_street_and_responsive)
     browser_version=browser.version
     browser.close()
 

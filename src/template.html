@@ -17,8 +17,8 @@
 <section class="farm-card" aria-label="农场地图与操作">
   <div class="farm-topbar"><div><h2><span id="farm-view-title">我的农场</span> <span id="land-count">16 格土地</span><button class="level-chip" id="farm-level" data-open="growth" title="查看庄园成长">庄园 Lv.1</button></h2><p id="farm-status">先自己收一轮，大肥鱼随后就来。</p></div><div class="farm-actions"><button class="button soft" data-open="build"><span data-icon="hammer"></span>建造</button><button class="button soft" id="expand-button" data-action="expand-mode"><span data-icon="expand"></span>扩地</button><button class="button primary" id="commercial-toggle" data-action="open-commercial">商业街</button><button class="button primary" id="farm-toggle" data-action="open-farm" hidden>返回农场</button></div></div>
   <section class="commercial-view" id="commercial-view" aria-label="商业街经营" hidden>
-    <div class="commercial-street" aria-label="商业街街景动画演示">
-      <div class="street-sky"><span class="street-cloud cloud-a"></span><span class="street-cloud cloud-b"></span></div>
+    <div class="commercial-street" aria-label="商业街街景">
+      <img class="street-backdrop" src="__STREET_BACKDROP_ART__" alt="" draggable="false">
       <div class="street-sign">庄园商业街 <small>今日营业中</small></div>
       <div class="street-shops">
         <div class="street-shop">
@@ -30,13 +30,11 @@
           <div class="shop-signboard">大白食品铺</div>
         </div>
       </div>
-      <div class="street-road"><span class="road-mark"></span><span class="street-customer customer-one"><i></i><b></b></span><span class="street-customer customer-two"><i></i><b></b></span><span class="street-customer customer-three"><i></i><b></b></span></div>
-      <span class="street-lamp lamp-one"></span><span class="street-lamp lamp-two"></span>
     </div>
     <div class="commercial-data" id="commercial-data" aria-label="商业街数据与操作">
       <div class="commercial-summary"><div><small>当前金币</small><strong id="street-gold">100</strong></div><div><small>仓库占用</small><strong id="street-storage">0 / 80</strong></div><div><small>累计售出</small><strong id="street-sold">0 份</strong></div><div class="commercial-auto"><small>自动批发</small><button id="street-sale-toggle" class="toggle" data-action="toggle-sale" aria-label="切换自动批发" aria-pressed="true"><i></i></button><strong id="street-sale-label">已开启</strong></div></div>
       <div class="shop-status-grid" id="shop-status-grid"></div>
-      <div class="commercial-rule"><strong>两种销售方式</strong><span>批发：单品满 6 份即可到账。零售：单件上架，顾客每 20 秒购买 1 份；动画不影响结算。</span></div>
+      <div class="commercial-rule"><strong>两种销售方式</strong><span>批发：单品满 6 份即可到账。零售：单件上架，每 20 游戏秒成交 1 份。</span></div>
       <div class="commercial-goods" id="commercial-goods"></div>
     </div>
   </section>

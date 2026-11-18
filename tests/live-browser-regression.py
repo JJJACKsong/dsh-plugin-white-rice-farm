@@ -248,8 +248,8 @@ try:
             page.evaluate('FarmTest.advance(20000)')
             sold = page.evaluate('FarmTest.getState()')
             assert sold['gold'] == gold + 3 and sold['shops']['produce']['qty'] == 0
-            page.evaluate('''() => {const s=FarmTest.getState();s.options.reducedMotion=true;FarmTest.setState(s)}''')
-            assert page.locator('.street-customer').first.evaluate('(e)=>getComputedStyle(e).animationName') == 'none'
+            assert page.locator('.street-customer').count() == 0
+            assert page.locator('.commercial-street').evaluate('(e)=>e.getAnimations({subtree:true}).length') == 0
             for width, height in [(1440, 900), (320, 700)]:
                 page.set_viewport_size({'width': width, 'height': height})
                 page.wait_for_timeout(100)
@@ -259,7 +259,7 @@ try:
                 assert dims['scroll'] <= dims['w'] + 1 and dims['stage'] > 0, (width, dims)
                 if width == 1440:
                     page.screenshot(path=str(OUT / 'commercial-street-1440.png'), full_page=True)
-            return f"two storefronts; 30/70={geometry['ratio']:.3f}; wholesale, one-unit retail, return, view switch and reduced-motion pass; 390/1440/320 widths"
+            return f"two storefronts on a static street; 30/70={geometry['ratio']:.3f}; wholesale, one-unit retail, return and view switch pass; 390/1440/320 widths"
 
         check('商业街三七布局、两店画面、批发零售退货与视图无副作用', commercial_street_flow)
 

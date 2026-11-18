@@ -229,7 +229,7 @@ function render(){
  $('harvest-label').textContent=mature?'收好再种':empty?'把空田补种好':'都在好好长着';$('harvest-button').disabled=mature+empty===0;
  $('context-hint').textContent=ui.crop==='rice'?'水井周围一圈可以种水稻；拖动地图查看，点击地块操作。':'拖动地图查看；点击成熟田收好再种，点空地种植。';
  const g=goal();ui.goal=g;$('goal-title').textContent=g.title;$('goal-desc').textContent=g.desc;$('goal-progress').style.width=(100*g.p)+'%';$('goal-progress-label').textContent=g.label;$('goal-button').textContent=g.button;$('goal-button').dataset.action=g.action;$('goal-button').disabled=!!g.disabled;
- document.body.classList.toggle('no-motion',s.options.reducedMotion);document.body.classList.toggle('commercial-mode',ui.view==='street');document.querySelector('.farm-card')?.classList.toggle('commercial-mode',ui.view==='street');$('commercial-view').hidden=ui.view!=='street';$('commercial-toggle').hidden=ui.view==='street';$('farm-toggle').hidden=ui.view!=='street';$('farm-view-title').textContent=ui.view==='street'?'庄园商业街':'我的农场';$('farm-status').textContent=ui.view==='street'?'上方街景只作演示；商品库存、金币和顾客成交沿用同一经营时钟。':(s.workers.length?`${s.workers.length} 位帮手正在照看，收割后自动补种。`:'先自己收一轮，大肥鱼随后就来。')+` · 声望 ${growth.xp}${growth.next?` / ${growth.nextXp}`:' · 已满级'}`;renderCrew();if(ui.view==='farm')renderBoard();else renderCommercial();updateSaveStatus();updateDrawerLive();hydrate();
+ document.body.classList.toggle('no-motion',s.options.reducedMotion);document.body.classList.toggle('commercial-mode',ui.view==='street');document.querySelector('.farm-card')?.classList.toggle('commercial-mode',ui.view==='street');$('commercial-view').hidden=ui.view!=='street';$('commercial-toggle').hidden=ui.view==='street';$('farm-toggle').hidden=ui.view!=='street';$('farm-view-title').textContent=ui.view==='street'?'庄园商业街':'我的农场';$('farm-status').textContent=ui.view==='street'?'库存、金币和零售进度与农场同步。':(s.workers.length?`${s.workers.length} 位帮手正在照看，收割后自动补种。`:'先自己收一轮，大肥鱼随后就来。')+` · 声望 ${growth.xp}${growth.next?` / ${growth.nextXp}`:' · 已满级'}`;renderCrew();if(ui.view==='farm')renderBoard();else renderCommercial();updateSaveStatus();updateDrawerLive();hydrate();
 }
 function closeDrawer(){ui.drawer=null;$('drawer').hidden=true;$('drawer-backdrop').hidden=true;document.body.style.overflow='';if(ui.focusReturn?.isConnected)ui.focusReturn.focus();ui.focusReturn=null;}
 function openDrawer(kind,tile=null){if(!ui.drawer)ui.focusReturn=document.activeElement;ui.drawer=kind;ui.tile=tile;ui.confirmReset=false;$('drawer').hidden=false;$('drawer-backdrop').hidden=false;document.body.style.overflow='hidden';renderDrawer();$('drawer').querySelector('[data-action="close-drawer"]').focus();}
@@ -396,7 +396,7 @@ function actTile(i){
  apply(()=>E.tend(s,i,ui.crop));
 }
 function action(a){
- if(a==='open-commercial'){ui.view='street';ui.mode=null;closeDrawer();render();$('farm-toggle').focus({preventScroll:true});tell('已进入商业街。街景只作演示，经营结算照常进行。');return;}
+ if(a==='open-commercial'){ui.view='street';ui.mode=null;closeDrawer();render();$('farm-toggle').focus({preventScroll:true});tell('已进入商业街。');return;}
  if(a==='open-farm'){ui.view='farm';render();$('commercial-toggle').focus({preventScroll:true});tell('已返回农场，商业街经营会继续按同一逻辑时钟结算。');return;}
  if(a==='tend-all')return apply(()=>E.tendAll(s));
  if(a==='recruit')return apply(()=>E.recruit(s));
