@@ -1,0 +1,47 @@
+{
+  "name": "dsh-plugin-white-rice-farm",
+  "version": "0.6.0-preview.7",
+  "private": true,
+  "description": "大白饭庄园：基于抢救记录恢复的独立可维护 DSH 农场插件",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "lib",
+    "icon.svg",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "license": "UNLICENSED",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": []
+    }
+  },
+  "scripts": {
+    "build": "python3 build.py && python3 tools/build_plugin.py",
+    "test": "npm run build && node tests/engine.test.cjs && node tests/plugin.test.cjs && node tests/workers.test.cjs",
+    "test:assets": "python3 tests/art-v04.test.py && python3 tests/building-style.test.py",
+    "test:browser": "python3 tests/browser.test.py",
+    "test:commercial": "python3 tests/commercial-street.test.py",
+    "test:integration": "python3 tests/integration.test.py",
+    "verify": "npm test && npm run test:assets && npm run test:browser && npm run test:commercial && npm run test:integration && npm run test:continuation && npm run test:placement",
+    "prepack": "npm run build",
+    "test:continuation": "python3 tests/continuation-ui.test.py && python3 tests/map-continuation.test.py",
+    "test:placement": "python3 tests/placement-ui.test.py"
+  },
+  "engines": {
+    "node": ">=20",
+    "dsh": ">=0.1.5-rc.2"
+  }
+}

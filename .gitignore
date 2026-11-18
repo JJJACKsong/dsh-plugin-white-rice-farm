@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.tgz
+tests/*-results.json
+tests/*.log
+tests/*-artifacts/
+tests/*.png

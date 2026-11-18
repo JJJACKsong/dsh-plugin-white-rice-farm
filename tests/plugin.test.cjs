@@ -1,0 +1,31 @@
+'use strict';
+const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
+const root=path.join(__dirname,'..'),p=JSON.parse(fs.readFileSync(path.join(root,'package.json')));
+const source=fs.readFileSync(path.join(root,'lib/client.js'),'utf8');
+let passed=0;const results=[];
+function test(name,fn){try{fn();passed++;results.push({name,pass:true});console.log('PASS',name);}catch(e){results.push({name,pass:false,error:e.message});console.error('FAIL',name,e.message);process.exitCode=1;}}
+let definition,rows=[],cleanups=[],calls=[];
+const React={Component:class{constructor(props){this.props=props;}setState(v){Object.assign(this.state,v);}},createElement:(type,props,...children)=>({type,props:props||{},children})};
+let writer=null,listeners=new Set(),store=new Map();
+const context={window:{__ModuleLoader__:{load(spec){assert.equal(spec.id,p.name);definition=spec.factory(name=>{assert.equal(name,'react');return React;});}},addEventListener:(n,fn)=>listeners.add(fn),removeEventListener:(n,fn)=>listeners.delete(fn)},navigator:{},crypto:{randomUUID:()=> 'test-channel'},localStorage:{getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,v),removeItem:k=>store.delete(k)},console};
+context.window.window=context.window;
+vm.runInNewContext(source,context,{timeout:5000});
+const slots={inject(name,fn){calls.push(name);const d=fn();cleanups.push(d);return()=>{};},register(opts,C){const r={opts,C};rows.push(r);return()=>{rows=rows.filter(x=>x!==r);};}};
+test('插件包具有 host/client 导出与 bundle patch',()=>{assert.ok(p.dsh.bundle.patch);assert.equal(p.exports['./client'],'./lib/client.js');for(const f of ['lib/client.js','lib/index.js','cordis.patch.yml','icon.svg'])assert.ok(fs.existsSync(path.join(root,f)));});
+test('头像闪烁回归：卡片只用静态 PNG，构建不内嵌有问题的 GIF',()=>{const ui=fs.readFileSync(path.join(root,'src/ui.js'),'utf8'),build=fs.readFileSync(path.join(root,'build.py'),'utf8'),html=fs.readFileSync(path.join(root,'index.html'),'utf8');assert.ok(ui.includes('const avatar=FARM_ASSETS.poster'));assert.ok(!ui.includes('FARM_ASSETS.worker'));assert.ok(!build.includes("'worker':uri(ROOT/'assets/worker-portrait.gif'"));assert.ok(!html.includes('worker-portrait.gif'));});
+test('客户端仅依赖 slots，配对注册侧栏与 main 面板',()=>{assert.equal(JSON.stringify(definition.inject),'["slots"]');definition.apply({slots});assert.equal(rows.length,2);assert.equal(rows[0].opts.id,rows[1].opts.key);assert.equal(rows[0].opts.label(),'大白饭庄园');});
+const Panel=rows.find(x=>x.opts.name==='main').C,instance=new Panel({});
+let childMessages=[];instance.frame.current={contentWindow:{postMessage:(...a)=>childMessages.push(a)},srcdoc:'x'};
+const child=instance.frame.current.contentWindow;
+test('源码无 host 工具、路由、工作区或模型调用',()=>{const host=fs.readFileSync(path.join(root,'lib/index.js'),'utf8');assert.ok(host.includes('export function apply() {}'));assert.ok(!source.includes('ctx.tools'));assert.ok(!source.includes('ctx.router'));assert.ok(!source.includes('fetch('));});
+test('启动创建隔离文档并安装精确来源校验的消息处理器',()=>{instance.boot();assert.equal(listeners.size,1);assert.ok(instance.state.document.includes("connect-src 'none'"));const node=instance.render();assert.equal(node.type,'iframe');assert.equal(node.props.sandbox,'allow-scripts allow-downloads');assert.ok(!node.props.sandbox.includes('allow-same-origin'));});
+const KEY='dsh-farm-v03',valid=JSON.stringify({version:3,tiles:Array(256).fill(null),workers:[],gold:108,time:1000});
+function message(source,channel,key,value){instance.onMessage({source,data:{kind:'farm-save',channel,key,value}});}
+test('不接受其他窗口发来的存档',()=>{message({},instance.channel,KEY,valid);assert.equal(store.get(KEY),undefined);});
+test('不接受错误通道或越界存储键',()=>{message(child,'wrong',KEY,valid);message(child,instance.channel,'auth-token',valid);message(child,instance.channel,'dsh-farm-v02',valid);assert.equal(store.size,0);});
+test('不接受损坏、超大、旧版本或错误结构存档',()=>{message(child,instance.channel,KEY,'bad');message(child,instance.channel,KEY,'x'.repeat(2*1024*1024+1));message(child,instance.channel,KEY,'{"version":2}');message(child,instance.channel,KEY,JSON.stringify({version:2,tiles:Array(256).fill(null),workers:[],gold:108,time:1000}));assert.equal(store.size,0);});
+test('有效存档写入专属本地键，备份/恢复键在白名单内',()=>{message(child,instance.channel,KEY,valid);assert.equal(store.get(KEY),valid);message(child,instance.channel,KEY+'-backup',valid);assert.equal(store.get(KEY+'-backup'),valid);message(child,instance.channel,KEY+'-recovery-123','opaque backup');assert.equal(store.get(KEY+'-recovery-123'),'opaque backup');assert.equal(store.get('dsh-farm-v02'),undefined);});
+test('持久化失败通知 iframe，不虚报已保存',()=>{context.localStorage.setItem=()=>{throw Error('quota');};message(child,instance.channel,KEY,valid);assert.equal(childMessages.at(-1)[0].kind,'farm-save-error');});
+test('卸载释放锁、移除监听器并清空 iframe',()=>{let released=false;instance.release=()=>released=true;instance.componentWillUnmount();assert.ok(released);assert.equal(listeners.size,0);assert.equal(instance.frame.current.srcdoc,'');});
+test('slots owner 卸载可以撤销两个入口',()=>{for(const d of cleanups)d();assert.equal(rows.length,0);});
+const report={passed,total:results.length,environment:'Node vm, DSH module-loader / slot-contract mocks; not a real DSH runtime',results};fs.writeFileSync(path.join(__dirname,'plugin-results.json'),JSON.stringify(report,null,2));console.log(`${passed}/${results.length} plugin tests passed`);

@@ -1,0 +1,700 @@
+{
+  "version": "0.4.1",
+  "generator": "Existing Image outputs supplied in this conversation; isolated full buildings and proportional scaling only",
+  "cropStates": {
+    "carrot": 4,
+    "wheat": 4,
+    "grass": 4,
+    "rice": 4
+  },
+  "stageThresholds": [
+    0,
+    0.2,
+    0.6,
+    1
+  ],
+  "mapBuildingKeys": [
+    "house",
+    "store",
+    "well",
+    "market",
+    "mill",
+    "bakery",
+    "cows",
+    "kitchen"
+  ],
+  "activeBuildingKeys": [
+    "house",
+    "store",
+    "well",
+    "kitchen",
+    "mill",
+    "bakery",
+    "cows"
+  ],
+  "reservedBuildingKeys": [
+    "market"
+  ],
+  "mapSize": [
+    224,
+    224
+  ],
+  "cardSize": [
+    320,
+    320
+  ],
+  "projectionNote": "Square-grid map with full original oblique building illustrations. Both map and cards preserve doors, walls, shop goods, animals and surrounding garden details; no strict overhead projection is claimed.",
+  "runtimeRecords": [
+    {
+      "id": "tiles/ground",
+      "file": "assets/tiles/ground.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "e4afe0bdaa522ec3be763dff673fcd560bd2aaf3773d12ff09f6da5b74f8ab2d",
+      "crop": [
+        352,
+        77,
+        550,
+        238
+      ],
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/ground.webp",
+      "runtimeSha256": "eae803806f794d3710031227054b6f0edef98f797b1840e8947ea8acccb56517"
+    },
+    {
+      "id": "tiles/soil",
+      "file": "assets/tiles/soil.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "8e375ea5434f152188d8c3e27c462c659d2e85a5cc0aac21694f6c68cd1fefdd",
+      "crop": [
+        701,
+        77,
+        897,
+        238
+      ],
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/soil.webp",
+      "runtimeSha256": "1c50081201cb88ed97a7bddd4d2afbc7c0bb8bd04342e60e10e9b5969670a310"
+    },
+    {
+      "id": "tiles/paddy",
+      "file": "assets/tiles/paddy.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "0d79c945db577d92b42aa296eb89824d80e622787597e1a62c737b899889f399",
+      "crop": [
+        1041,
+        77,
+        1245,
+        239
+      ],
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/paddy.webp",
+      "runtimeSha256": "9851528272cb8ab4e94f7d3d64388c891f4fdf172005dbbd8ae41926b67b328c"
+    },
+    {
+      "id": "tiles/carrot-0",
+      "file": "assets/tiles/carrot-0.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "ce4468145fcb1aa8589b4d4aa35545acbf204b163ef2479d07912e354370e781",
+      "crop": [
+        306,
+        296,
+        506,
+        441
+      ],
+      "stage": 0,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/carrot-0.webp",
+      "runtimeSha256": "15b94378fcf6983c8c397b8e5dbcc9a1b1566f458c5039d6f29f29633f110492"
+    },
+    {
+      "id": "tiles/carrot-1",
+      "file": "assets/tiles/carrot-1.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "ed89781028913ca8a44dcba7533d1540fad5bb40fe91598f320c8f938a458092",
+      "crop": [
+        583,
+        296,
+        785,
+        441
+      ],
+      "stage": 1,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/carrot-1.webp",
+      "runtimeSha256": "14463027b4f163f103481b4de5b5ace31091bf2b473b787357243c0d4b782f0a"
+    },
+    {
+      "id": "tiles/carrot-2",
+      "file": "assets/tiles/carrot-2.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "d0de3228e6f0acac8ae8284eb954d26e7ac5ce9b1d14fec78709d80d1fd1a1f1",
+      "crop": [
+        863,
+        295,
+        1066,
+        442
+      ],
+      "stage": 2,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/carrot-2.webp",
+      "runtimeSha256": "b15e069b448be16f5dfff7b5a8724fc985e21fe4d670bdd2a5ca428ead13fe53"
+    },
+    {
+      "id": "tiles/carrot-3",
+      "file": "assets/tiles/carrot-3.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "0d9f70d2ccb4dac71fc9203a0940dcfd40c03106241870044d3443d4d582d177",
+      "crop": [
+        1143,
+        295,
+        1358,
+        442
+      ],
+      "stage": 3,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/carrot-3.webp",
+      "runtimeSha256": "f633c68ef38de13f0665874c9495fe248586a1a9c70bd8d820f37b39d93d49b2"
+    },
+    {
+      "id": "tiles/wheat-0",
+      "file": "assets/tiles/wheat-0.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "5036da4628a018fafed66419cef560b66dfef52dc19395c2f993785e4e478432",
+      "crop": [
+        305,
+        490,
+        506,
+        626
+      ],
+      "stage": 0,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/wheat-0.webp",
+      "runtimeSha256": "a9396878a1d45ff1d42a50d3cc31fdd5563c611d580e5c649a58abcd5549a86c"
+    },
+    {
+      "id": "tiles/wheat-1",
+      "file": "assets/tiles/wheat-1.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "e0853ac9b323f9b4a07531ac1a9d6b4b94954c938f0f1467016364dcdb59adaf",
+      "crop": [
+        583,
+        490,
+        785,
+        626
+      ],
+      "stage": 1,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/wheat-1.webp",
+      "runtimeSha256": "713958403beb5f0dc26fa8dee2b0519fc290ed002cba1b5e6d8439769a86e21a"
+    },
+    {
+      "id": "tiles/wheat-2",
+      "file": "assets/tiles/wheat-2.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "1a2f3c85dc65cdf8135fce736b6772356b51961f065b3f5b092daf445eeb716f",
+      "crop": [
+        863,
+        489,
+        1068,
+        627
+      ],
+      "stage": 2,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/wheat-2.webp",
+      "runtimeSha256": "48613d7d784f44d6c6d96eeb6d1778a30cc53ea8f067bb16c99f5b83d7f705cd"
+    },
+    {
+      "id": "tiles/wheat-3",
+      "file": "assets/tiles/wheat-3.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "8f547cee73c08c3c0fcbe88f1d5cf8fa5e16a138bc7442654d92de516b1f6637",
+      "crop": [
+        1143,
+        489,
+        1358,
+        627
+      ],
+      "stage": 3,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/wheat-3.webp",
+      "runtimeSha256": "7c175d134742c0c19c27f758ae43e0eaf1b2de2b27e4a153d6c52c8d73c15009"
+    },
+    {
+      "id": "tiles/grass-0",
+      "file": "assets/tiles/grass-0.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "55f85e4ec96124f73a413d778fb456a7e41a823473d49ecadc49325e5e0b79e8",
+      "crop": [
+        304,
+        678,
+        506,
+        800
+      ],
+      "stage": 0,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/grass-0.webp",
+      "runtimeSha256": "53a5a796fa7856c74bab4555c042a293760a0723fcdd9fedf13f9fce0f9d13c4"
+    },
+    {
+      "id": "tiles/grass-1",
+      "file": "assets/tiles/grass-1.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "4ab4662b11a97dff55dbd7661ffd6a9c77a3e6e3787fa87304f954fae9975929",
+      "crop": [
+        583,
+        678,
+        785,
+        801
+      ],
+      "stage": 1,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/grass-1.webp",
+      "runtimeSha256": "5d0910d131cb5586e1da0f10249a8ea9ef463844124d6f6ebab232d23ceaf477"
+    },
+    {
+      "id": "tiles/grass-2",
+      "file": "assets/tiles/grass-2.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "263c5bbd893f7fcd36330ae3eecda7109dd9e3984c8a2974fe9c505a2122b8b4",
+      "crop": [
+        863,
+        678,
+        1068,
+        802
+      ],
+      "stage": 2,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/grass-2.webp",
+      "runtimeSha256": "d1a06559fd629ad29e2664e45ad66a4ee604adc0a90ae06480e49e6732b1a1cf"
+    },
+    {
+      "id": "tiles/grass-3",
+      "file": "assets/tiles/grass-3.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "ffc3590f7ee0ce86edcf8aa9dd5b5dc28ca84690c5f5d7dcc4eae4ff776e22e5",
+      "crop": [
+        1143,
+        678,
+        1358,
+        802
+      ],
+      "stage": 3,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/grass-3.webp",
+      "runtimeSha256": "7ebac02b023e2e57c3c93ad791b746a833b8ca0eb8fbb5911c2ab232c098c3be"
+    },
+    {
+      "id": "tiles/rice-0",
+      "file": "assets/tiles/rice-0.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "1521dfac0a8e1de23de7a93812bcbe775bc9392197ffbc7f86956ca755ab98c1",
+      "crop": [
+        303,
+        852,
+        506,
+        1002
+      ],
+      "stage": 0,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/rice-0.webp",
+      "runtimeSha256": "c853105c099f8b0e56e3bc9de0788f12967501d4ddc6c792efe0d9b88449a0cf"
+    },
+    {
+      "id": "tiles/rice-1",
+      "file": "assets/tiles/rice-1.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "5496487a6b9d42b896aa1a2484c794412e8d4aaf661767254be2b82a35a38f41",
+      "crop": [
+        582,
+        852,
+        785,
+        1002
+      ],
+      "stage": 1,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/rice-1.webp",
+      "runtimeSha256": "325b2af1c6c871e23a627898181278b3309694d4874e0cc8cd621244dea484a6"
+    },
+    {
+      "id": "tiles/rice-2",
+      "file": "assets/tiles/rice-2.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "363436f5231c50fc8b461a9ccd42f91edca3c3fedc32e9ca860a13b9aadee198",
+      "crop": [
+        861,
+        852,
+        1068,
+        1003
+      ],
+      "stage": 2,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/rice-2.webp",
+      "runtimeSha256": "0eabf2ca63bdc6b533e98d32230a124211bced5f8d63e15e4e1adee31679a522"
+    },
+    {
+      "id": "tiles/rice-3",
+      "file": "assets/tiles/rice-3.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "crop-stages-v04.png",
+      "sha256": "33ee4fb0cffdb10d128bde5aaebe290e31eaf0cc546afdae334cbcd84c8641ca",
+      "crop": [
+        1142,
+        851,
+        1360,
+        1003
+      ],
+      "stage": 3,
+      "usage": "map",
+      "runtimeFile": "assets/runtime/tiles/rice-3.webp",
+      "runtimeSha256": "d5a243b92ef6295c8d507f6ea34caad8ebebba5023fcee9883982312e0c55d31"
+    },
+    {
+      "id": "building-cards/house",
+      "file": "assets/building-cards/house.png",
+      "size": [
+        320,
+        320
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "b97fa6ae5213942ec2b7fba0d44daf8167f0627b222290ae7117f618618b45a7",
+      "crop": [
+        43,
+        77,
+        398,
+        414
+      ],
+      "usage": "panel: full original oblique illustration; also source for map",
+      "runtimeFile": "assets/runtime/building-cards/house.webp",
+      "runtimeSha256": "323194e991cac721e5f471ee2f1ba2289afad8db8c2748d553488a9ad6b2974f"
+    },
+    {
+      "id": "building-cards/store",
+      "file": "assets/building-cards/store.png",
+      "size": [
+        320,
+        320
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "50925d75dd9075915ff4889693d65c727bb57a882276421f69f3fb6a7b122534",
+      "crop": [
+        415,
+        123,
+        705,
+        414
+      ],
+      "usage": "panel: full original oblique illustration; also source for map",
+      "runtimeFile": "assets/runtime/building-cards/store.webp",
+      "runtimeSha256": "5e1cd8b28834a715b815d9b0f9c49059080e82937a98fc440ea8c11fe6e23602"
+    },
+    {
+      "id": "building-cards/well",
+      "file": "assets/building-cards/well.png",
+      "size": [
+        320,
+        320
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "adb21bd71fe22929197b61c5346e52c4d2123cd105d9006c993b581cf5d1e4e7",
+      "crop": [
+        709,
+        125,
+        1002,
+        414
+      ],
+      "usage": "panel: full original oblique illustration; also source for map",
+      "runtimeFile": "assets/runtime/building-cards/well.webp",
+      "runtimeSha256": "f6f939618be1431d3f67a54072bdd39f22447a7755b50568aea51d591d94ec8d"
+    },
+    {
+      "id": "building-cards/market",
+      "file": "assets/building-cards/market.png",
+      "size": [
+        320,
+        320
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "c4ff23e9ebe680c910ae32dbb160cc0745a48e3103a9e27a032a19ae0f99f449",
+      "crop": [
+        1015,
+        120,
+        1374,
+        414
+      ],
+      "usage": "panel: full original oblique illustration; also source for map",
+      "runtimeFile": "assets/runtime/building-cards/market.webp",
+      "runtimeSha256": "5f174431c46b551557d7f3e75f81a8425951e1e4b199712a944a9ad94cf97398"
+    },
+    {
+      "id": "building-cards/mill",
+      "file": "assets/building-cards/mill.png",
+      "size": [
+        320,
+        320
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "0d208a5bf397794edd23a53e536152b2cb0c67183e1de69ea656c9bf876a689c",
+      "crop": [
+        40,
+        480,
+        349,
+        804
+      ],
+      "usage": "panel: full original oblique illustration; also source for map",
+      "runtimeFile": "assets/runtime/building-cards/mill.webp",
+      "runtimeSha256": "e86829499812eabc6828f6e2c217fc3b1ce4e309799b8bef2314b025edc9fb24"
+    },
+    {
+      "id": "building-cards/bakery",
+      "file": "assets/building-cards/bakery.png",
+      "size": [
+        320,
+        320
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "7822bcd1360bd64f7543abbfdd76da72c34cef5dbcc83d9babb30f175ca495dd",
+      "crop": [
+        359,
+        479,
+        679,
+        804
+      ],
+      "usage": "panel: full original oblique illustration; also source for map",
+      "runtimeFile": "assets/runtime/building-cards/bakery.webp",
+      "runtimeSha256": "be1d30b517c27b1279163c8b8978d035ca35df15a39ea91d9e5ed0c18cc2c1cb"
+    },
+    {
+      "id": "building-cards/cows",
+      "file": "assets/building-cards/cows.png",
+      "size": [
+        320,
+        320
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "b01ff7a83e13c1ae9946a41961e137531f6f46f5700b8be0a0cd78b99b8baa4e",
+      "crop": [
+        704,
+        514,
+        1006,
+        804
+      ],
+      "usage": "panel: full original oblique illustration; also source for map",
+      "runtimeFile": "assets/runtime/building-cards/cows.webp",
+      "runtimeSha256": "e0714c90b9686a94d0fbe3c8db5abbded44971a57c6cd6fcd302bad84ee0d18f"
+    },
+    {
+      "id": "building-cards/kitchen",
+      "file": "assets/building-cards/kitchen.png",
+      "size": [
+        320,
+        320
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "b63c6e40da874f4406508f0aa1cb77bfa52ec3b9c002db608496b1574f859c08",
+      "crop": [
+        1021,
+        479,
+        1377,
+        804
+      ],
+      "usage": "panel: full original oblique illustration; also source for map",
+      "runtimeFile": "assets/runtime/building-cards/kitchen.webp",
+      "runtimeSha256": "b1922ac6e6073486a464d3115b7395dadd1014e11046f139c1948870ceabd136"
+    },
+    {
+      "id": "buildings/house",
+      "file": "assets/buildings/house.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "df30d946f110d2a58d2ebd9955907e475b6cff340a49efc30422a13cf8b4b158",
+      "usage": "map: full original oblique building, proportionally scaled",
+      "sourceCard": "assets/building-cards/house.png",
+      "projection": "square-grid map with oblique building illustration",
+      "runtimeFile": "assets/runtime/buildings/house.webp",
+      "runtimeSha256": "6fa1169102fac674a28cc9d25c99da4e04eb823bfc3b1953eb9e4caec7f6fcf2"
+    },
+    {
+      "id": "buildings/store",
+      "file": "assets/buildings/store.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "b20467557fe8b238b850d6bdfad971edd268a9ef1f824bcfb49720d7460ae2ba",
+      "usage": "map: full original oblique building, proportionally scaled",
+      "sourceCard": "assets/building-cards/store.png",
+      "projection": "square-grid map with oblique building illustration",
+      "runtimeFile": "assets/runtime/buildings/store.webp",
+      "runtimeSha256": "0cffcada3e61e2ac2452e5146fb6a71f77b4f17db95f671177d508ab54583a8f"
+    },
+    {
+      "id": "buildings/well",
+      "file": "assets/buildings/well.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "2d095af6549831208d69537bc14f7a09b53b59b274a2ead90ac85257e868c91f",
+      "usage": "map: full original oblique building, proportionally scaled",
+      "sourceCard": "assets/building-cards/well.png",
+      "projection": "square-grid map with oblique building illustration",
+      "runtimeFile": "assets/runtime/buildings/well.webp",
+      "runtimeSha256": "4e80e4a1f1ae40141315cb5d029c5979f03324fcdbea91b638f17b8db7f295b5"
+    },
+    {
+      "id": "buildings/market",
+      "file": "assets/buildings/market.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "020a1a3825c5825078844d6b7c5ff7ec71908b459dc6eadcf1160eaf32a37107",
+      "usage": "map: full original oblique building, proportionally scaled",
+      "sourceCard": "assets/building-cards/market.png",
+      "projection": "square-grid map with oblique building illustration",
+      "runtimeFile": "assets/runtime/buildings/market.webp",
+      "runtimeSha256": "9476ff907b2738660210db76d4f018e2e8853aa74b4b3e853a861397eb1db788"
+    },
+    {
+      "id": "buildings/mill",
+      "file": "assets/buildings/mill.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "8bd9377a4511b0c0ef196f27c7f3caed3f0498d7affe8e3dc115108fe05e6cb2",
+      "usage": "map: full original oblique building, proportionally scaled",
+      "sourceCard": "assets/building-cards/mill.png",
+      "projection": "square-grid map with oblique building illustration",
+      "runtimeFile": "assets/runtime/buildings/mill.webp",
+      "runtimeSha256": "9f4dfbc2bed28dc1cc083034fece6249895221c30b01e1d437d8dc679371d7ac"
+    },
+    {
+      "id": "buildings/bakery",
+      "file": "assets/buildings/bakery.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "cdfebdaa45e412499fc0e538a6d534909185e8c76db9e1d45601535ca6a59694",
+      "usage": "map: full original oblique building, proportionally scaled",
+      "sourceCard": "assets/building-cards/bakery.png",
+      "projection": "square-grid map with oblique building illustration",
+      "runtimeFile": "assets/runtime/buildings/bakery.webp",
+      "runtimeSha256": "939eb44f59cade2405cb6e8817c8d0ffc132a6131afb7c89d9968e127053b475"
+    },
+    {
+      "id": "buildings/cows",
+      "file": "assets/buildings/cows.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "b26e21dbf8b61fd8c21f237e9024d07219f19cbb074edad8769530b6a4aa8a02",
+      "usage": "map: full original oblique building, proportionally scaled",
+      "sourceCard": "assets/building-cards/cows.png",
+      "projection": "square-grid map with oblique building illustration",
+      "runtimeFile": "assets/runtime/buildings/cows.webp",
+      "runtimeSha256": "9a33174cf7308af50160e7e26d95d27b9e5fb68c83f30ae5f21b3265c1eaccf6"
+    },
+    {
+      "id": "buildings/kitchen",
+      "file": "assets/buildings/kitchen.png",
+      "size": [
+        224,
+        224
+      ],
+      "source": "buildings-v04.png",
+      "sha256": "5eb3088eda3412151c1d327411591c6ca79cf6bf1cd743238801ee6ac17414ef",
+      "usage": "map: full original oblique building, proportionally scaled",
+      "sourceCard": "assets/building-cards/kitchen.png",
+      "projection": "square-grid map with oblique building illustration",
+      "runtimeFile": "assets/runtime/buildings/kitchen.webp",
+      "runtimeSha256": "03cf49164ac9e78dc05fe9b399f1493d815ad5b149da0361d69830a2318da219"
+    }
+  ],
+  "workers": "Existing 0.3 animation assets retained, not regenerated or newly licensed.",
+  "rights": "Community-inspired fan design. Technical usability does not establish third-party rights or redistribution/commercial clearance."
+}

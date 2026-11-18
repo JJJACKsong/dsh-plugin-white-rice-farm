@@ -1,0 +1,30 @@
+{
+  "sourceHashes": {
+    "src/engine.js": "c5fbf753addd486820162664ab6a5cdf3c108986c34f75d1ff8b91b99c8c4db6",
+    "src/tiles.js": "4a30f2d7fd6b00c3f817cafc986982ae906351fca25377661f4ea4f4e102d154",
+    "src/ui.js": "b0d11127f37d4a0f0f477abd11f25bb5b0252d899c1a4c944045c3bda651f9fd",
+    "src/workers.js": "81d2fb0ecfef56b0434a52dae38120ff4ff8061805d36a072ab6f9af5c374491",
+    "src/plugin-client.js": "82b2ec9a5e6281014f54ef8863f35cac8df2d69adc2b93ce5da0c4e04ea6f1c0"
+  },
+  "cropHashes": {
+    "assets/tiles/carrot-0.png": "ce4468145fcb1aa8589b4d4aa35545acbf204b163ef2479d07912e354370e781",
+    "assets/tiles/carrot-1.png": "ed89781028913ca8a44dcba7533d1540fad5bb40fe91598f320c8f938a458092",
+    "assets/tiles/carrot-2.png": "d0de3228e6f0acac8ae8284eb954d26e7ac5ce9b1d14fec78709d80d1fd1a1f1",
+    "assets/tiles/carrot-3.png": "0d9f70d2ccb4dac71fc9203a0940dcfd40c03106241870044d3443d4d582d177",
+    "assets/tiles/grass-0.png": "55f85e4ec96124f73a413d778fb456a7e41a823473d49ecadc49325e5e0b79e8",
+    "assets/tiles/grass-1.png": "4ab4662b11a97dff55dbd7661ffd6a9c77a3e6e3787fa87304f954fae9975929",
+    "assets/tiles/grass-2.png": "263c5bbd893f7fcd36330ae3eecda7109dd9e3984c8a2974fe9c505a2122b8b4",
+    "assets/tiles/grass-3.png": "ffc3590f7ee0ce86edcf8aa9dd5b5dc28ca84690c5f5d7dcc4eae4ff776e22e5",
+    "assets/tiles/ground.png": "e4afe0bdaa522ec3be763dff673fcd560bd2aaf3773d12ff09f6da5b74f8ab2d",
+    "assets/tiles/paddy.png": "0d79c945db577d92b42aa296eb89824d80e622787597e1a62c737b899889f399",
+    "assets/tiles/rice-0.png": "1521dfac0a8e1de23de7a93812bcbe775bc9392197ffbc7f86956ca755ab98c1",
+    "assets/tiles/rice-1.png": "5496487a6b9d42b896aa1a2484c794412e8d4aaf661767254be2b82a35a38f41",
+    "assets/tiles/rice-2.png": "363436f5231c50fc8b461a9ccd42f91edca3c3fedc32e9ca860a13b9aadee198",
+    "assets/tiles/rice-3.png": "33ee4fb0cffdb10d128bde5aaebe290e31eaf0cc546afdae334cbcd84c8641ca",
+    "assets/tiles/soil.png": "8e375ea5434f152188d8c3e27c462c659d2e85a5cc0aac21694f6c68cd1fefdd",
+    "assets/tiles/wheat-0.png": "5036da4628a018fafed66419cef560b66dfef52dc19395c2f993785e4e478432",
+    "assets/tiles/wheat-1.png": "e0853ac9b323f9b4a07531ac1a9d6b4b94954c938f0f1467016364dcdb59adaf",
+    "assets/tiles/wheat-2.png": "1a2f3c85dc65cdf8135fce736b6772356b51961f065b3f5b092daf445eeb716f",
+    "assets/tiles/wheat-3.png": "8f547cee73c08c3c0fcbe88f1d5cf8fa5e16a138bc7442654d92de516b1f6637"
+  }
+}

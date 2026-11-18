@@ -1,0 +1,15 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>大白饭庄园 · 回归测试宿主（非真实 DSH）</title>
+<style>html,body,#root{height:100%;width:100%;margin:0;overflow:hidden}</style>
+</head><body><div id="root"></div>
+<script src="./vendor/react.production.min.js"></script>
+<script src="./vendor/react-dom.production.min.js"></script>
+<script>
+window.registrations=[];
+window.__ModuleLoader__={load(spec){const plugin=spec.factory(name=>{if(name==='react')return React;throw Error('Unexpected module: '+name)});plugin.apply({slots:{inject:(_slot,fn)=>fn(),register:(options,Component)=>{const record={options,Component};registrations.push(record);return()=>{registrations=registrations.filter(item=>item!==record)}}}})}};
+window.mountFarm=()=>{const Component=registrations.find(record=>record.options.name==='main').Component;window.panel=ReactDOM.render(React.createElement(Component),document.getElementById('root'))};
+window.unmountFarm=()=>ReactDOM.unmountComponentAtNode(document.getElementById('root'));
+</script>
+<script src="../lib/client.js"></script>
+<script>window.mountFarm();</script>
+</body></html>

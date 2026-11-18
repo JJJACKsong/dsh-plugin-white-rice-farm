@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="种点田，蒸点大白饭，招四只大肥鱼来帮忙。离线可玩的轻挂机农场。">
+<title>大白饭庄园 · 米食加工版 0.6</title>
+<style>/*__CSS__*/</style>
+</head>
+<body>
+<div id="art-defs" aria-hidden="true"></div>
+<header class="site-header">
+  <a class="brand" href="#" aria-label="大白饭庄园首页"><span class="brand-mark" data-icon="sprout"></span><span>大白饭庄园<small>种点田，日子慢慢过。</small></span></a>
+  <div class="header-right"><div class="resource" title="金币"><span data-icon="coin"></span><strong id="gold">100</strong><small>金币</small></div><div class="resource rice-resource" title="大白饭只在招工时消耗"><span data-icon="meal"></span><strong id="meal">0</strong><small>大白饭</small></div><button class="icon-button" data-open="settings" aria-label="打开设置与存档详情" title="设置与存档"><span data-icon="settings"></span></button></div>
+</header>
+<div class="page-heading"><div><span class="eyebrow">你的小小农场</span><h1>种下去，等好事发生。</h1></div></div>
+<main class="layout">
+<section class="farm-card" aria-label="农场地图与操作">
+  <div class="farm-topbar"><div><h2><span id="farm-view-title">我的农场</span> <span id="land-count">16 格土地</span><button class="level-chip" id="farm-level" data-open="growth" title="查看庄园成长">庄园 Lv.1</button></h2><p id="farm-status">先自己收一轮，大肥鱼随后就来。</p></div><div class="farm-actions"><button class="button soft" data-open="build"><span data-icon="hammer"></span>建造</button><button class="button soft" id="expand-button" data-action="expand-mode"><span data-icon="expand"></span>扩地</button><button class="button primary" id="commercial-toggle" data-action="open-commercial">商业街</button><button class="button primary" id="farm-toggle" data-action="open-farm" hidden>返回农场</button></div></div>
+  <section class="commercial-view" id="commercial-view" aria-label="商业街经营" hidden>
+    <div class="commercial-street" aria-label="商业街街景动画演示">
+      <div class="street-sky"><span class="street-cloud cloud-a"></span><span class="street-cloud cloud-b"></span></div>
+      <div class="street-sign">庄园商业街 <small>今日营业中</small></div>
+      <div class="street-shops">
+        <div class="street-shop produce-front"><div class="shop-awning"><i></i><i></i><i></i><i></i><i></i></div><div class="shop-roof"></div><div class="shop-signboard">田园农产铺</div><div class="shop-window"><span>菜</span><span>谷</span><span>米</span></div><div class="shop-door"></div><div class="shop-nameplate">新鲜现摘</div></div>
+        <div class="street-shop food-front"><div class="shop-awning"><i></i><i></i><i></i><i></i><i></i></div><div class="shop-roof"></div><div class="shop-signboard">大白食品铺</div><div class="shop-window"><span>面</span><span>饭</span><span>奶</span></div><div class="shop-door"></div><div class="shop-nameplate">庄园手作</div></div>
+      </div>
+      <div class="street-road"><span class="road-mark"></span><span class="street-customer customer-one"><i></i><b></b></span><span class="street-customer customer-two"><i></i><b></b></span><span class="street-customer customer-three"><i></i><b></b></span></div>
+      <span class="street-lamp lamp-one"></span><span class="street-lamp lamp-two"></span>
+    </div>
+    <div class="commercial-data" id="commercial-data" aria-label="商业街数据与操作">
+      <div class="commercial-summary"><div><small>当前金币</small><strong id="street-gold">100</strong></div><div><small>仓库占用</small><strong id="street-storage">0 / 80</strong></div><div><small>累计售出</small><strong id="street-sold">0 份</strong></div><div class="commercial-auto"><small>自动批发</small><button id="street-sale-toggle" class="toggle" data-action="toggle-sale" aria-label="切换自动批发" aria-pressed="true"><i></i></button><strong id="street-sale-label">已开启</strong></div></div>
+      <div class="shop-status-grid" id="shop-status-grid"></div>
+      <div class="commercial-rule"><strong>两种销售方式</strong><span>批发：单品满 6 份即可到账。零售：单件上架，顾客每 20 秒购买 1 份；动画不影响结算。</span></div>
+      <div class="commercial-goods" id="commercial-goods"></div>
+    </div>
+  </section>
+  <div class="placement-banner" id="placement" hidden><div><strong id="placement-title"></strong><small id="placement-hint"></small></div><button class="button small" data-action="cancel-mode">取消</button></div>
+  <div class="garden" id="garden"><div class="garden-head"><div class="garden-note" id="garden-note"><span></span>好好种田，也好好摸鱼。</div><div class="map-toolbar" role="group" aria-label="地图视图"><button type="button" class="map-tool" data-map-action="zoom-out" aria-label="缩小地图">−</button><button type="button" class="map-tool" data-map-action="zoom-in" aria-label="放大地图">＋</button><button type="button" class="map-tool map-fit" data-map-action="fit" aria-label="查看全图并定位" aria-pressed="false">全景</button></div></div><div class="board-scroll" id="board-scroll"><div class="board-stage"><div id="board" class="board" role="group" aria-label="方格农场，点击地块操作；拖动地图查看"></div><div id="actors" class="actor-layer" aria-hidden="true"></div></div></div><div class="garden-legend" id="garden-legend"></div></div>
+  <nav class="compact-management" aria-label="庄园管理"><button class="button small" data-open="overview">目标</button><button class="button small" data-open="inventory">仓库</button><button class="button small" data-open="workshops">工坊</button><button class="button small" data-open="orders">订单</button><button class="button small" data-action="open-commercial">商业街</button></nav><div class="planting-dock"><div class="dock-label"><strong>空地种什么？</strong><span>选一种，点地就种</span></div><div class="crop-options" id="crop-options"></div><button class="button primary harvest-button" id="harvest-button" data-action="tend-all"><span data-icon="basket"></span><span id="harvest-label">收好再种</span><b id="harvest-count">2</b></button></div>
+  <div class="farm-footnote"><span data-icon="pointer"></span><span id="context-hint">拖动地图查看；点击成熟田收好再种，点空地种植。</span></div>
+</section>
+<aside class="sidebar">
+  <section class="card goal-card"><div class="card-kicker"><span class="small-dot"></span>下一件小事</div><h2 id="goal-title"></h2><p id="goal-desc"></p><div class="progress-track"><i id="goal-progress"></i></div><div class="goal-progress-label" id="goal-progress-label"></div><button class="button primary wide" id="goal-button"></button></section>
+  <section class="card crew-card"><div class="section-heading"><h2>招来吃白饭的</h2><span id="crew-count" class="pill">0 / 4</span></div><div id="crew-body"></div><div id="crew-recruit"></div></section>
+  <section class="card management-card"><button class="management-row" data-open="inventory"><span class="row-icon" data-icon="box"></span><span><strong>仓库</strong><small id="storage-label"></small></span><b data-icon="arrow"></b></button><button class="management-row" data-open="workshops"><span class="row-icon" data-icon="mill"></span><span><strong>工坊</strong><small id="workshop-label">建好就会自动加工</small></span><b data-icon="arrow"></b></button><button class="management-row" data-open="orders"><span class="row-icon" data-icon="order"></span><span><strong>订单</strong><small id="order-label">顺手多赚一点，不做也没关系</small></span><b data-icon="arrow"></b></button></section>
+  <section class="auto-sale-strip"><span data-icon="cart"></span><div><strong id="sale-title">余粮自动出售</strong><small>加工原料、订单物资和招工用的饭会留下。</small></div><button id="sale-toggle" class="toggle" data-action="toggle-sale" aria-label="切换自动售货" aria-pressed="true"><i></i></button></section>
+</aside>
+</main>
+<div class="notice" id="notice"><span class="notice-live" role="status" aria-live="polite"><span data-icon="leaf"></span><span id="notice-text">先点一下成熟的萝卜，再来蒸一锅大白饭。</span></span><button class="save-status" id="save-status" type="button" data-open="settings" title="查看存档详情或导出备份" aria-label="存档状态：自动存档。打开设置可查看存档详情或导出备份"><span class="status-dot" aria-hidden="true"></span><span id="save-status-text">自动存档</span></button></div>
+<footer><span>大白饭庄园 · 0.6 米食加工版</span><span>方格农场 · 4 × 4 → 16 × 16 · 最多 4 位帮手</span><button data-open="help">怎么玩</button></footer>
+<div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden><div class="drawer-header"><div><small id="drawer-kicker">庄园小账本</small><h2 id="drawer-title"></h2></div><button class="icon-button" data-action="close-drawer" aria-label="关闭面板"><span data-icon="close"></span></button></div><div class="drawer-content" id="drawer-content"></div></aside>
+<input type="file" id="import-input" accept="application/json,.json" hidden>
+<noscript>这个小游戏需要启用浏览器的 JavaScript。游戏不连接网络，也不调用模型。</noscript>
+<script>/*__ENGINE__*/</script>
+<script>const FARM_ASSETS = /*__ASSETS__*/;</script>
+<script>/*__TILES__*/</script>
+<script>/*__ACTORS__*/</script>
+<script>/*__MAP_VIEW__*/</script>
+<script>/*__UI__*/</script>
+</body></html>
