@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-white-rice-farm",
-  "version": "0.6.0-preview.7",
+  "version": "0.6.0-preview.8",
   "private": true,
   "description": "大白饭庄园：基于抢救记录恢复的独立可维护 DSH 农场插件",
   "type": "module",
