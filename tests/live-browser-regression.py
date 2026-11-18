@@ -132,6 +132,48 @@ try:
 
         check('真实同源 localStorage 续档、浏览器原生导出与导入', persistence_and_download)
 
+        def standalone_lock_handoff():
+            ctx = context(viewport={'width': 390, 'height': 844})
+            first = open_standalone(ctx)
+            assert first.evaluate('!!navigator.locks')
+            second = ctx.new_page()
+            track(second)
+            second.goto(BASE + '/index.html', wait_until='load')
+            second.get_by_role('heading', name='农场已在另一个页面打开').wait_for(timeout=3000)
+            assert second.locator('#board').count() == 0
+
+            first.locator('[data-tile="51"]').click()
+            second.close()
+            assert first.evaluate(f'JSON.parse(localStorage.getItem("{KEY}")).gold') == 88
+
+            second = ctx.new_page()
+            track(second)
+            second.goto(BASE + '/index.html', wait_until='load')
+            retry = second.get_by_role('button', name='重新打开农场')
+            retry.wait_for()
+            first.close()
+            retry.click()
+            second.wait_for_function('!!window.FarmTest')
+            assert second.locator('#gold').inner_text() == '88'
+            assert second.evaluate('FarmTest.getState().tiles[51].crop') == 'carrot'
+            ctx.close()
+
+        check('网页版只允许一个标签写档，关闭后可重开并接续', standalone_lock_handoff)
+
+        def standalone_stale_save_fallback():
+            ctx = context(viewport={'width': 390, 'height': 844})
+            ctx.add_init_script("Object.defineProperty(navigator, 'locks', {value: undefined});")
+            first = open_standalone(ctx)
+            second = open_standalone(ctx)
+            first.locator('[data-tile="51"]').click()
+            second.evaluate('FarmTest.save()')
+            assert second.locator('#save-status-text').inner_text() == '存档冲突'
+            second.close()
+            assert first.evaluate(f'JSON.parse(localStorage.getItem("{KEY}")).gold') == 88
+            ctx.close()
+
+        check('浏览器无 Web Locks 时，旧页面保存和关闭均不覆盖新进度', standalone_stale_save_fallback)
+
         def legacy_v2_migration_and_key_isolation():
             seed_ctx = context(viewport={'width': 390, 'height': 844})
             seed_page = open_standalone(seed_ctx)

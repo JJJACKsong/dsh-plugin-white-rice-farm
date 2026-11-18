@@ -297,6 +297,9 @@ with sync_playwright() as p:
                 try:
                     after=state(page)
                     assert after==expected,(label,elapsed,after,expected)
+                    # This memory adapter has no shared-origin lock. Flush the
+                    # settled snapshot explicitly, as on normal page exit.
+                    page.evaluate('FarmTest.save()')
                     assert page.evaluate("JSON.parse(localStorage.getItem('dsh-farm-v03'))")==expected
                     if key in (PREV_KEY,OLD_KEY):
                         assert page.evaluate('(k)=>localStorage.getItem(k)',key)==saved

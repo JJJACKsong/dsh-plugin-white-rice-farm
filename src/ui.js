@@ -1,8 +1,20 @@
 /* UI controller. No network, accounts, analytics, model calls, or external dependencies. */
 (function(){
 'use strict';
-const Store=window.FARM_STORAGE||{getItem:k=>window.localStorage.getItem(k),setItem:(k,v)=>window.localStorage.setItem(k,v)};
+function startFarm(hasWriteLock=false){
+const embeddedStore=window.FARM_STORAGE;
+const Store=embeddedStore||{getItem:k=>window.localStorage.getItem(k),setItem:(k,v)=>window.localStorage.setItem(k,v)};
 const E=window.FarmEngine, $=id=>document.getElementById(id), KEY='dsh-farm-v03', PREV_KEY='dsh-farm-v02', OLD_KEY='dsh-farm-v01';
+const saveConflictMessage='另一个页面保存了新进度。关闭其他农场页面后刷新，即可接续。也可以先在设置中导出本页进度。';
+let savedSnapshot=null, saveConflict=false;
+function writeSave(key,value){
+ if(!embeddedStore && (saveConflict || Store.getItem(KEY)!==savedSnapshot)){
+  saveConflict=true;
+  throw new Error(saveConflictMessage);
+ }
+ Store.setItem(key,value);
+ if(key===KEY) savedSnapshot=value;
+}
 const fmt=n=>Math.floor(n).toLocaleString('zh-CN');
 const paths={
  sprout:'M12 21V11M12 15C4 16 3 10 3 6c6 0 10 3 9 9ZM12 11C12 4 16 2 21 3c0 5-3 8-9 8Z',
@@ -67,9 +79,11 @@ function buildArt(){
 const ui={crop:'carrot',mode:null,building:null,moveFrom:null,drawer:null,tile:null,cols:0,confirmReset:false,focusReturn:null,goal:null,lastCrewKey:'',lastRender:0,storageOK:true,saveWarned:false,view:'farm'};
 let s, storageError='', bootMessage='',lastWall=Date.now(),lastSave=0;
 try{
- const stored=Store.getItem(KEY),prev=Store.getItem(PREV_KEY),old=Store.getItem(OLD_KEY);
- if(stored){try{s=E.restore(JSON.parse(stored),lastWall);}catch(err){Store.setItem(KEY+'-recovery-'+lastWall,stored);s=E.initial(lastWall);bootMessage='存档格式有误，已备份原数据并新建农场；可在设置里导出当前进度。';}}
- else if(prev){try{s=E.restore(JSON.parse(prev),lastWall);bootMessage='已从旧版 v2 存档迁移到当前版本；原存档保留，不会覆盖新货架。';}catch(err){Store.setItem(KEY+'-recovery-'+lastWall,prev);s=E.initial(lastWall);bootMessage='旧版 v2 存档格式有误，已备份原数据并新建农场；可在设置里导出当前进度。';}}
+ const stored=Store.getItem(KEY);
+ savedSnapshot=stored;
+ const prev=Store.getItem(PREV_KEY),old=Store.getItem(OLD_KEY);
+ if(stored){try{s=E.restore(JSON.parse(stored),lastWall);}catch(err){writeSave(KEY+'-recovery-'+lastWall,stored);s=E.initial(lastWall);bootMessage='存档格式有误，已备份原数据并新建农场；可在设置里导出当前进度。';}}
+ else if(prev){try{s=E.restore(JSON.parse(prev),lastWall);bootMessage='已从旧版 v2 存档迁移到当前版本；原存档保留，不会覆盖新货架。';}catch(err){writeSave(KEY+'-recovery-'+lastWall,prev);s=E.initial(lastWall);bootMessage='旧版 v2 存档格式有误，已备份原数据并新建农场；可在设置里导出当前进度。';}}
  else if(old){s=E.restore(JSON.parse(old),lastWall);bootMessage=s.lastNotice;}
  else s=E.initial(lastWall);
 }catch(err){ui.storageOK=false;storageError='当前浏览器限制了本地存档，请在设置中导出备份。';s=E.initial(lastWall);}
@@ -78,16 +92,26 @@ const actors=createFarmActors({layer:$('actors'),board:$('board'),getState:()=>s
 const mapView=createFarmMapView({viewport:$('board-scroll'),board:$('board'),onChange:()=>{actors.sync(mapView.tileSize());renderMapLegend();}});
 const elapsed=Math.max(0,lastWall-s.savedAt);
 if(elapsed>0){const before={gold:s.gold,harvests:s.stats.harvests};E.advance(s,Math.min(elapsed,E.OFFLINE_CAP));if(elapsed>5000&&!bootMessage)bootMessage=`离开了 ${Math.max(1,Math.floor(elapsed/60000))} 分钟，农场推进 ${Math.round(Math.min(elapsed,E.OFFLINE_CAP)/60000)} 分钟：收了 ${s.stats.harvests-before.harvests} 块田，收入 ${fmt(s.gold-before.gold)} 金币${elapsed>E.OFFLINE_CAP?'（离线最多结算 8 小时）':''}。`;}
-function save(){s.savedAt=Date.now();try{Store.setItem(KEY,JSON.stringify(s));ui.storageOK=true;lastSave=Date.now();}catch(err){ui.storageOK=false;lastSave=Date.now();}updateSaveStatus();}
+function save(){
+ s.savedAt=Date.now();
+ try{writeSave(KEY,JSON.stringify(s));ui.storageOK=true;}
+ catch{ui.storageOK=false;}
+ lastSave=Date.now();
+ updateSaveStatus();
+}
 function saveOK(){return window.FARM_STORAGE?.available===false?false:ui.storageOK;}
-function saveStatusDetail(ok=saveOK()){return ok?'本地存档正常：操作后会立即写入当前浏览器，并每 5 秒补存一次。':'本地存档受限：当前浏览器没有成功写入，进度可能只在当前页面保留。请现在导出存档备份。';}
+function saveStatusDetail(ok=saveOK()){
+ if(saveConflict)return saveConflictMessage;
+ return ok?'本地存档正常：操作后会立即写入当前浏览器，并每 5 秒补存一次。':'本地存档受限：当前浏览器没有成功写入，进度可能只在当前页面保留。请现在导出存档备份。';
+}
 function updateSaveStatus(){
  const ok=saveOK();ui.storageOK=ok;
  const el=$('save-status'),label=$('save-status-text');
- if(el){el.classList.toggle('is-error',!ok);const aria=ok?'存档状态：自动存档。打开设置可查看存档详情或导出备份。':'存档状态：存档受限。打开设置查看详情并导出备份。';if(el.getAttribute('aria-label')!==aria)el.setAttribute('aria-label',aria);}
- if(label&&label.textContent!==(ok?'自动存档':'存档受限'))label.textContent=ok?'自动存档':'存档受限';
+ const status=saveConflict?'存档冲突':ok?'自动存档':'存档受限';
+ if(el){el.classList.toggle('is-error',!ok);const aria=`存档状态：${status}。打开设置查看详情或导出备份。`;if(el.getAttribute('aria-label')!==aria)el.setAttribute('aria-label',aria);}
+ if(label&&label.textContent!==status)label.textContent=status;
  document.querySelectorAll('[data-save-detail]').forEach(e=>{const text=saveStatusDetail(ok);if(e.textContent!==text)e.textContent=text;});
- if(!ok&&!ui.saveWarned){ui.saveWarned=true;tell('本地存档受限，进度可能只在当前页面保留；请在设置里导出备份。',true);}
+ if(!ok&&!ui.saveWarned){ui.saveWarned=true;tell(saveConflict?saveConflictMessage:'本地存档受限，进度可能只在当前页面保留；请在设置里导出备份。',true);}
  else if(ok)ui.saveWarned=false;
 }
 function tickTime(notify=true){const before=E.farmLevel(s),t=Date.now(),dt=Math.max(0,t-lastWall);if(dt)E.advance(s,Math.min(dt,E.OFFLINE_CAP));lastWall=t;const after=E.farmLevel(s);if(notify&&after>before)tell(`庄园升到 Lv.${after}，新建筑与成长奖励已经解锁。`);}
@@ -396,12 +420,12 @@ function action(a){
  if(a==='export-save'){tickTime();save();const blob=new Blob([JSON.stringify(s,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='大白饭庄园-存档-'+new Date().toISOString().slice(0,10)+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);tell('已发起存档下载，请保管好 JSON 文件。');return;}
  if(a==='import-save'){$('import-input').click();return;}
  if(a==='import-old'){
-  try{const source=[PREV_KEY,OLD_KEY].find(k=>Store.getItem(k)),old=source?Store.getItem(source):null;if(!old){tell('这个文件路径下没有找到旧存档；旧版农场没有被更改。',true);return;}const imported=E.restore(JSON.parse(old));backupCurrent();s=imported;lastWall=Date.now();E.advance(s,Math.min(E.OFFLINE_CAP,Math.max(0,lastWall-s.savedAt)));ui.mode=null;ui.lastCrewKey='';save();render();renderDrawer();tell(`旧版存档已复制，原存档没有改动。自动售货${s.options.autoSell?'已开启':'已暂停'}。`);}catch(e){tell('没有成功导入：'+e.message,true);}return;
+  try{const source=[PREV_KEY,OLD_KEY].find(k=>Store.getItem(k)),old=source?Store.getItem(source):null;if(!old){tell('这个文件路径下没有找到旧存档；旧版农场没有被更改。',true);return;}const imported=E.restore(JSON.parse(old));backupCurrent();s=imported;lastWall=Date.now();E.advance(s,Math.min(E.OFFLINE_CAP,Math.max(0,lastWall-s.savedAt)));ui.mode=null;ui.lastCrewKey='';save();render();renderDrawer();if(!saveConflict)tell(`旧版存档已复制，原存档没有改动。自动售货${s.options.autoSell?'已开启':'已暂停'}。`);}catch(e){tell('没有成功导入：'+e.message,true);}return;
  }
  if(a==='request-reset'){ui.confirmReset=true;renderDrawer();return;}
- if(a==='confirm-reset'){backupCurrent();s=E.initial();lastWall=Date.now();ui.mode=null;ui.lastCrewKey='';closeDrawer();save();render();tell('新农场准备好了。上一份进度已尽力备份在本浏览器内。');return;}
+ if(a==='confirm-reset'){backupCurrent();s=E.initial();lastWall=Date.now();ui.mode=null;ui.lastCrewKey='';closeDrawer();save();render();if(!saveConflict)tell('新农场准备好了。上一份进度已尽力备份在本浏览器内。');return;}
 }
-function backupCurrent(){try{Store.setItem(KEY+'-backup',JSON.stringify(s));return true;}catch(e){return false;}}
+function backupCurrent(){try{writeSave(KEY+'-backup',JSON.stringify(s));return true;}catch(e){return false;}}
 document.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b||b.disabled)return;
  if(b.dataset.streetAction){const kind=b.dataset.streetAction,shop=b.dataset.shop,item=b.dataset.item,qty=Number(b.dataset.qty),price=Number(b.dataset.price);
@@ -431,14 +455,49 @@ document.addEventListener('keydown',e=>{
 });
 $('import-input').addEventListener('change',async e=>{
  const file=e.target.files?.[0];e.target.value='';if(!file)return;if(file.size>2*1024*1024){tell('存档超过 2 MB，未导入。',true);return;}
- try{const candidate=E.restore(JSON.parse(await file.text()));backupCurrent();s=candidate;lastWall=Date.now();E.advance(s,Math.min(E.OFFLINE_CAP,Math.max(0,lastWall-s.savedAt)));ui.mode=null;ui.lastCrewKey='';save();render();renderDrawer();tell('存档已导入，原进度已尽力在本地备份。');}catch(err){tell('导入失败，当前农场没有改变：'+err.message,true);}
+ try{const candidate=E.restore(JSON.parse(await file.text()));backupCurrent();s=candidate;lastWall=Date.now();E.advance(s,Math.min(E.OFFLINE_CAP,Math.max(0,lastWall-s.savedAt)));ui.mode=null;ui.lastCrewKey='';save();render();renderDrawer();if(!saveConflict)tell('存档已导入，原进度已尽力在本地备份。');}catch(err){tell('导入失败，当前农场没有改变：'+err.message,true);}
 });
 let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(renderBoard,100);});
 window.addEventListener('pagehide',()=>{tickTime();save();mapView.dispose();actors.dispose();tiles.dispose();});
 document.addEventListener('visibilitychange',()=>{tickTime();save();if(!document.hidden)render();else renderCrew();});
 if(window.FARM_EMBEDDED)document.body.classList.add('embedded');
-buildArt();hydrate();render();save();if(bootMessage)tell(bootMessage);else if(storageError)tell(storageError,true);
+buildArt();hydrate();render();
+// With no lock, opening a second copy should not supersede a valid saved game.
+if(hasWriteLock || embeddedStore || !savedSnapshot || bootMessage) save();
+else{
+ s.savedAt=lastWall;
+ lastSave=lastWall;
+}
+if(bootMessage)tell(bootMessage);else if(storageError)tell(storageError,true);
 setInterval(()=>{if(document.hidden)return;tickTime();render();if(Date.now()-lastSave>=5000)save();},1000);
 window.FarmFlush=()=>{tickTime();save();};
 if(window.FARM_TEST_MODE)window.FarmTest={tiles:()=>tiles.snapshot(),assetsReady:()=>tiles.ready(),actors:()=>actors.snapshot(),getState:()=>E.clone(s),setState:v=>{s=E.restore(v);lastWall=Date.now();ui.lastCrewKey='';render();},advance:ms=>{E.advance(s,ms);lastWall=Date.now();render();},save,render,open:openDrawer};
+}
+
+if(window.FARM_STORAGE || !navigator.locks?.request){
+ startFarm();
+ return;
+}
+
+// Match the DSH host's lock name so both entry points agree on a single writer.
+let enteredLockCallback=false;
+navigator.locks.request('dsh-white-rice-farm-save-v2',{ifAvailable:true},lock=>{
+ enteredLockCallback=true;
+ if(!lock){
+  const panel=document.createElement('main');
+  panel.className='card farm-in-use';
+  panel.innerHTML='<h1>农场已在另一个页面打开</h1><p>请先关闭那个页面，再从这里继续经营。</p><button class="button primary" type="button">重新打开农场</button>';
+  panel.querySelector('button').addEventListener('click',()=>location.reload());
+  document.body.replaceChildren(panel);
+  return;
+ }
+ startFarm(true);
+ window.addEventListener('pageshow',event=>{if(event.persisted) location.reload();});
+ return new Promise(release=>window.addEventListener('pagehide',release,{once:true}));
+}).catch(error=>{
+ if(enteredLockCallback) throw error;
+ // Some file URLs and browser profiles expose Web Locks but reject requests.
+ // The standalone save check still protects against a stale loaded snapshot.
+ startFarm();
+});
 })();
