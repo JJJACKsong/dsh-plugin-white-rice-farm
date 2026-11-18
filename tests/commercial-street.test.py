@@ -37,6 +37,20 @@ with sync_playwright() as p:
         page.locator('#commercial-toggle').click()
         assert page.locator('#commercial-view').is_visible()
         assert page.locator('.street-shop').count()==2
+        shops=page.locator('.street-shop img').evaluate_all("""async images=>{
+            await Promise.all(images.map(img=>img.decode()));
+            const scene=document.querySelector('.commercial-street').getBoundingClientRect();
+            return images.map(img=>{
+                const box=img.getBoundingClientRect();
+                return {
+                    embedded:img.src.startsWith('data:image/'),
+                    decoded:img.naturalWidth>0&&img.naturalHeight>0,
+                    visible:box.width>0&&box.height>0&&box.left>=scene.left&&box.right<=scene.right
+                        &&box.top>=scene.top&&box.bottom<=scene.bottom
+                };
+            });
+        }""")
+        assert shops==[{'embedded':True,'decoded':True,'visible':True}]*2,shops
         g=page.evaluate("""()=>{const v=document.querySelector('#commercial-view').getBoundingClientRect(),a=document.querySelector('.commercial-street').getBoundingClientRect(),d=document.querySelector('.commercial-data');return {ratio:a.height/v.height,street:a.height,data:d.clientHeight,scroll:d.scrollHeight}}""")
         assert .27<=g['ratio']<=.34 and g['data']>g['street'] and g['scroll']>g['data'],g
         page.screenshot(path=str(ARTIFACTS/'commercial-street-390.png'),full_page=True)

@@ -23,6 +23,7 @@ def main() -> None:
             'buildings':image_group('buildings'),
             'buildingCards':image_group('building-cards'),
             'animations':{**{name:uri(ROOT/'assets/animations'/f'{name}.gif','image/gif') for name in ('work','idle','walk','harvest','carry')},**{name+'Poster':uri(ROOT/'assets/animations'/f'{name}.png','image/png') for name in ('walk','idle','work','carry','harvest')}}}
+    street_shops=image_group('street-shops')
     template=(ROOT/'src/template.html').read_text(encoding='utf-8')
     replacements={
         '/*__CSS__*/':(ROOT/'src/style.css').read_text(encoding='utf-8'),
@@ -32,6 +33,8 @@ def main() -> None:
         '/*__MAP_VIEW__*/':(ROOT/'src/map-view.js').read_text(encoding='utf-8'),
         '/*__UI__*/':(ROOT/'src/ui.js').read_text(encoding='utf-8'),
         '/*__ASSETS__*/':json.dumps(assets,ensure_ascii=False),
+        '__STREET_PRODUCE_ART__':street_shops['produce'],
+        '__STREET_FOOD_ART__':street_shops['food'],
     }
     for marker,text in replacements.items(): template=template.replace(marker,text)
     (ROOT/'index.html').write_text(template,encoding='utf-8')
